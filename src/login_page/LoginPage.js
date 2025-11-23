@@ -1,7 +1,6 @@
 import React from "react";
-import "./LoginPage.css";
-import backgroundImg from "./background.jpg";
-import flipzyLogo from "./Flipzy_Logo.png";
+// Make sure this path is correct for your project
+import flipzyLogo from "./Flipzy_Logo.png"; 
 
 export default function LoginPage() {
   const clientId = "425935075553-hh37qk9fpi1ghoqntgo9u59isr7lhjtd.apps.googleusercontent.com"; 
@@ -19,92 +18,173 @@ export default function LoginPage() {
   };
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(${backgroundImg})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        height: "100vh",
-        padding: "24px",
-        display: "grid",
-        placeItems: "center",
-      }}
-    >
-      <main className="wrap">
-        {/* Brand */}
-        <section
-          className="brand"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            marginTop: "30px",
-          }}
-        >
-          <div
-            className="logo"
-            style={{
-              width: "140px",
-              height: "140px",
-              borderRadius: "50%",
-              overflow: "hidden",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "none",
-              marginBottom: "20px",
-            }}
-          >
-            <img
-              src={flipzyLogo}
-              alt="Flipzy"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "50%",
-                border: "4px solid white",
-              }}
-            />
-          </div>
+    <div style={styles.container}>
+      {/* 1. Inject the same Font & Animation styles as MainPage */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; margin: 0; }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .login-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+      `}</style>
 
-          <h1
-            style={{
-              color: "white",
-              textShadow: "0 0 6px rgba(0,0,0,0.4)",
-              margin: 0,
-            }}
-          >
-            Flipzy
-          </h1>
-
-          <p style={{ color: "rgba(255,255,255,0.8)", marginTop: "4px" }}>
-            Sign in with your Google Account
-          </p>
-        </section>
-
-        {/* Google login */}
-        <div className="card">
-          <div className="content" style={{ textAlign: "center" }}>
-            <button
-              type="button"
-              className="btn-ghost"
-              onClick={loginWithGoogle}
-              style={{
-                padding: "12px 20px",
-                borderRadius: "12px",
-                fontSize: "16px",
-                cursor: "pointer",
-              }}
-            >
-              Continue with Google
-            </button>
-          </div>
+      <div style={styles.contentWrapper}>
+        {/* Brand Section */}
+        <div style={styles.logoContainer}>
+          <img src={flipzyLogo} alt="Flipzy Logo" style={styles.logoImage} />
         </div>
-      </main>
+        
+        <h1 style={styles.title}>Welcome to Flipzy</h1>
+        <p style={styles.subtitle}>Manage your wallet and shop with ease.</p>
+
+        {/* Login Card */}
+        <div className="login-card" style={styles.card}>
+          <button 
+            onClick={loginWithGoogle}
+            style={styles.googleButton}
+            onMouseEnter={(e) => e.target.style.background = "#f8fafc"}
+            onMouseLeave={(e) => e.target.style.background = "white"}
+          >
+            <img 
+              src="https://www.svgrepo.com/show/475656/google-color.svg" 
+              alt="G" 
+              style={{ width: "24px", height: "24px" }} 
+            />
+            <span>Continue with Google</span>
+          </button>
+
+          <div style={styles.divider}>
+            <span style={styles.dividerText}>or continue as guest</span>
+          </div>
+
+          <button 
+             style={styles.ghostButton}
+             onClick={() => window.location.href = "http://localhost:3000/main"}
+          >
+            View Demo Dashboard →
+          </button>
+        </div>
+
+        <p style={styles.footerText}>
+          By clicking continue, you agree to our Terms of Service and Privacy Policy.
+        </p>
+      </div>
     </div>
   );
 }
+
+/* =========================================
+   STYLES (MATCHING MAIN PAGE THEME)
+   ========================================= */
+const styles = {
+  container: {
+    height: "100vh",
+    width: "100vw",
+    // EXACT SAME BACKGROUND AS MAIN PAGE
+    background: "#f3f4f6", 
+    backgroundImage: "radial-gradient(circle at 50% 0%, #e0e7ff 0%, #f3f4f6 70%)", // Subtle top glow
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  contentWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    animation: "fadeIn 0.6s ease-out forwards",
+    maxWidth: "400px",
+    width: "90%",
+  },
+  logoContainer: {
+    width: "100px",
+    height: "100px",
+    borderRadius: "24px", // Squircle shape like Sidebar avatars
+    background: "white",
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: "24px",
+    overflow: "hidden",
+  },
+  logoImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+  title: {
+    fontSize: "32px",
+    fontWeight: "800",
+    color: "#111827", // Dark Slate (Same as sidebar bg)
+    margin: "0 0 8px 0",
+    textAlign: "center",
+  },
+  subtitle: {
+    color: "#6b7280",
+    fontSize: "16px",
+    marginBottom: "32px",
+    textAlign: "center",
+  },
+  card: {
+    background: "white",
+    padding: "40px 30px",
+    borderRadius: "24px",
+    width: "100%",
+    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)", // Same shadow depth as MainPage cards
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+  },
+  googleButton: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+    width: "100%",
+    padding: "14px",
+    background: "white",
+    border: "1px solid #e5e7eb",
+    borderRadius: "12px",
+    fontSize: "16px",
+    fontWeight: "600",
+    color: "#374151",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+  },
+  divider: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "10px 0",
+  },
+  dividerText: {
+    color: "#9ca3af",
+    fontSize: "12px",
+    textTransform: "uppercase",
+    letterSpacing: "1px",
+  },
+  ghostButton: {
+    background: "transparent",
+    border: "none",
+    color: "#3b82f6", // Primary Blue
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  footerText: {
+    marginTop: "24px",
+    fontSize: "12px",
+    color: "#9ca3af",
+    textAlign: "center",
+    lineHeight: "1.5",
+  },
+};
