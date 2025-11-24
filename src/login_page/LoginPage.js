@@ -1,61 +1,49 @@
 import React from "react";
-// Make sure this path is correct for your project
-import flipzyLogo from "./Flipzy_Logo.png"; 
+import flipzyLogo from "./Flipzy_Logo.png";
 
 export default function LoginPage() {
-  const clientId = "425935075553-hh37qk9fpi1ghoqntgo9u59isr7lhjtd.apps.googleusercontent.com"; 
+  const clientId = "425935075553-hh37qk9fpi1ghoqntgo9u59isr7lhjtd.apps.googleusercontent.com";
 
   const loginWithGoogle = () => {
+    const redirectUri = "https://storage.googleapis.com/flipzy-frontend/build/index.html";
     const params = new URLSearchParams({
       client_id: clientId,
-      redirect_uri: "http://localhost:3000/main",
+      redirect_uri: redirectUri,
       response_type: "token",
       scope: "openid email profile",
       prompt: "select_account",
     });
-    window.location.href =
-      "https://accounts.google.com/o/oauth2/v2/auth?" + params.toString();
+    window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?" + params.toString();
   };
 
   return (
     <div style={styles.container}>
-      {/* 1. Inject the same Font & Animation styles as MainPage */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; margin: 0; }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .login-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .login-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
       `}</style>
 
       <div style={styles.contentWrapper}>
-        {/* Brand Section */}
         <div style={styles.logoContainer}>
           <img src={flipzyLogo} alt="Flipzy Logo" style={styles.logoImage} />
         </div>
-        
+
         <h1 style={styles.title}>Welcome to Flipzy</h1>
         <p style={styles.subtitle}>Manage your wallet and shop with ease.</p>
 
-        {/* Login Card */}
         <div className="login-card" style={styles.card}>
-          <button 
+          <button
             onClick={loginWithGoogle}
             style={styles.googleButton}
-            onMouseEnter={(e) => e.target.style.background = "#f8fafc"}
-            onMouseLeave={(e) => e.target.style.background = "white"}
+            onMouseEnter={(e) => (e.target.style.background = "#f8fafc")}
+            onMouseLeave={(e) => (e.target.style.background = "white")}
           >
-            <img 
-              src="https://www.svgrepo.com/show/475656/google-color.svg" 
-              alt="G" 
-              style={{ width: "24px", height: "24px" }} 
+            <img
+              src="https://www.svgrepo.com/show/475656/google-color.svg"
+              alt="G"
+              style={{ width: "24px", height: "24px" }}
             />
             <span>Continue with Google</span>
           </button>
@@ -64,9 +52,9 @@ export default function LoginPage() {
             <span style={styles.dividerText}>or continue as guest</span>
           </div>
 
-          <button 
-             style={styles.ghostButton}
-             onClick={() => window.location.href = "http://localhost:3000/main"}
+          <button
+            style={styles.ghostButton}
+            onClick={() => (window.location.href = "/#/main")}
           >
             View Demo Dashboard →
           </button>
@@ -80,16 +68,12 @@ export default function LoginPage() {
   );
 }
 
-/* =========================================
-   STYLES (MATCHING MAIN PAGE THEME)
-   ========================================= */
 const styles = {
   container: {
     height: "100vh",
     width: "100vw",
-    // EXACT SAME BACKGROUND AS MAIN PAGE
-    background: "#f3f4f6", 
-    backgroundImage: "radial-gradient(circle at 50% 0%, #e0e7ff 0%, #f3f4f6 70%)", // Subtle top glow
+    background: "#f3f4f6",
+    backgroundImage: "radial-gradient(circle at 50% 0%, #e0e7ff 0%, #f3f4f6 70%)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -106,9 +90,9 @@ const styles = {
   logoContainer: {
     width: "100px",
     height: "100px",
-    borderRadius: "24px", // Squircle shape like Sidebar avatars
+    borderRadius: "24px",
     background: "white",
-    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -123,7 +107,7 @@ const styles = {
   title: {
     fontSize: "32px",
     fontWeight: "800",
-    color: "#111827", // Dark Slate (Same as sidebar bg)
+    color: "#111827",
     margin: "0 0 8px 0",
     textAlign: "center",
   },
@@ -138,7 +122,7 @@ const styles = {
     padding: "40px 30px",
     borderRadius: "24px",
     width: "100%",
-    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)", // Same shadow depth as MainPage cards
+    boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
     display: "flex",
     flexDirection: "column",
     gap: "16px",
@@ -175,7 +159,7 @@ const styles = {
   ghostButton: {
     background: "transparent",
     border: "none",
-    color: "#3b82f6", // Primary Blue
+    color: "#3b82f6",
     fontSize: "14px",
     fontWeight: "600",
     cursor: "pointer",

@@ -67,7 +67,7 @@ export default function MainPage() {
       id: Math.random(),
       name: newProductData.name,
       price: parseFloat(newProductData.price),
-      category: newProductData.category, // This will now accept custom strings
+      category: newProductData.category, 
       type: newProductData.type, 
       color: randomColor,
     };
@@ -262,7 +262,6 @@ function UserProfile({ user }) {
   );
 }
 
-/* UPDATED POST PRODUCT: Toggle for Custom Category */
 function PostProduct({ onPost }) {
   const [isCustomCategory, setIsCustomCategory] = useState(false);
   
