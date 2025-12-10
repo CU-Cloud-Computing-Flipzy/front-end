@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 
+/* Base URL for the Composite microservice */
+const API_BASE_URL =
+  process.env.REACT_APP_COMPOSITE_API_BASE_URL || "http://localhost:8080";
+
 /* =========================================
    MOCK DATA (Initial State)
    ========================================= */
@@ -41,6 +45,45 @@ export default function MainPage() {
     }
   }, []);
 
+  // Fetch items from Composite → Listing backend
+  const fetchItemsFromBackend = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/composite/items`);
+      if (!res.ok) {
+        console.error("Failed to fetch items:", res.status, await res.text());
+        return;
+      }
+      const data = await res.json();
+      console.log("Raw items from composite:", data);
+
+      // Map CompositeItem → frontend product shape
+      const mapped = data.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: parseFloat(item.price),
+        category: item.category ? item.category.name : "Uncategorized",
+        type: "Real", // or derive from item/order_type later
+        color: "#3b82f6", // placeholder color
+      }));
+
+      console.log("Mapped items for UI:", mapped);
+
+      // If backend returns items, replace the mock products with real data
+      if (Array.isArray(mapped) && mapped.length > 0) {
+        setProducts(mapped);
+      }
+      
+    } catch (err) {
+      console.error("Error fetching items from backend:", err);
+    }
+  };
+
+  // Call backend fetch once on mount (in addition to loading user)
+  useEffect(() => {
+    fetchItemsFromBackend();
+  }, []);
+
+
   // --- ACTIONS ---
 
   const handleBuyNow = (product) => {
@@ -59,7 +102,7 @@ export default function MainPage() {
     setActivePage("orders");
   };
 
-  const handlePostProduct = (newProductData) => {
+  const handlePostProduct = async (newProductData) => {
     const colors = ["#ef4444", "#f97316", "#f59e0b", "#84cc16", "#10b981", "#06b6d4", "#3b82f6", "#8b5cf6", "#d946ef", "#f43f5e"];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
@@ -74,6 +117,55 @@ export default function MainPage() {
 
     setProducts([productToAdd, ...products]);
     setActivePage("shop");
+
+    // 2) Best-effort POST to Composite → Listing backend
+    // Only try if we have a real user id (e.g., from Google login)
+    if (!user || !user.id) {
+      console.log(
+        "No user.id available (guest mode) - skipping backend create, UI-only product added."
+      );
+      return;
+    }
+
+    try {
+      const payload = {
+        seller_id: user.id, // UUID from the user service
+        item: {
+          // This shape can be adjusted later as backend evolves
+          name: newProductData.name,
+          description: `User-listed item in category ${newProductData.category}`,
+          price: newProductData.price,
+          status: "active",
+          condition: "new",
+          // For now, send a simple category object; backend can decide how to interpret it
+          category: {
+            name: newProductData.category,
+            description: newProductData.category,
+          },
+          media: [],
+        },
+      };
+
+      const res = await fetch(`${API_BASE_URL}/composite/items/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        console.error(
+          "Backend create failed:",
+          res.status,
+          await res.text()
+        );
+      } else {
+        const created = await res.json();
+        console.log("Item created via composite backend:", created);
+        // Optional: later we can sync local `products` with returned item
+      }
+    } catch (err) {
+      console.error("Error calling composite create item:", err);
+    }
   };
 
   const handleLogout = () => {
