@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 /* Base URL for the Composite microservice */
-const API_BASE_URL =
-  process.env.REACT_APP_COMPOSITE_API_BASE_URL || "http://localhost:8080";
+const API_BASE_URL = "https://composite-service-425935075553.us-central1.run.app";
 
 /* =========================================
    MOCK DATA (Initial State)
