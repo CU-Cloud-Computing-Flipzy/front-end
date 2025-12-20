@@ -11,12 +11,15 @@ export default function Callback() {
       const accessToken = params.get("access_token");
 
       if (accessToken) {
+        // 1. Get Google Info
         fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
           .then((res) => res.json())
           .then((googleUser) => {
             const backendUrl = "https://composite-service-425935075553.us-central1.run.app";
+            
+            // 2. Send to your Backend to create/fetch user
             return fetch(`${backendUrl}/login/google`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -30,14 +33,31 @@ export default function Callback() {
             });
           })
           .then((res) => {
-            if (!res.ok) throw new Error();
+            if (!res.ok) throw new Error("Backend login failed");
             return res.json();
           })
-          .then((user) => {
-            localStorage.setItem("user", JSON.stringify(user));
+          .then((data) => {
+            // data = { user: { ... }, jwt: "..." }
+
+            // 3. TRANSFORM DATA
+            const userForFrontend = {
+                id: data.user.id,
+                name: data.user.full_name || data.user.username, 
+                email: data.user.email,
+                picture: data.user.avatar_url,
+                // UPDATED: Save the role here so it is available immediately
+                role: data.user.role, 
+                jwt: data.jwt,
+                balance: "$0.00" 
+            };
+
+            localStorage.setItem("user", JSON.stringify(userForFrontend));
             navigate("/main");
           })
-          .catch(() => navigate("/"));
+          .catch((err) => {
+            console.error("Login Error:", err);
+            navigate("/");
+          });
       }
     } else {
       navigate("/");

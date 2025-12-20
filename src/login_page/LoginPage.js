@@ -5,7 +5,8 @@ export default function LoginPage() {
   const clientId = "425935075553-hh37qk9fpi1ghoqntgo9u59isr7lhjtd.apps.googleusercontent.com";
 
   const loginWithGoogle = () => {
-    const redirectUri = "https://storage.googleapis.com/flipzy-frontend/build/index.html";
+    const redirectUri = "https://storage.googleapis.com/flipzy-frontend/index.html";
+    
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
@@ -46,17 +47,6 @@ export default function LoginPage() {
               style={{ width: "24px", height: "24px" }}
             />
             <span>Continue with Google</span>
-          </button>
-
-          <div style={styles.divider}>
-            <span style={styles.dividerText}>or continue as guest</span>
-          </div>
-
-          <button
-            style={styles.ghostButton}
-            onClick={() => (window.location.href = "/#/main")}
-          >
-            View Demo Dashboard →
           </button>
         </div>
 
@@ -143,26 +133,6 @@ const styles = {
     color: "#374151",
     cursor: "pointer",
     transition: "all 0.2s ease",
-  },
-  divider: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    margin: "10px 0",
-  },
-  dividerText: {
-    color: "#9ca3af",
-    fontSize: "12px",
-    textTransform: "uppercase",
-    letterSpacing: "1px",
-  },
-  ghostButton: {
-    background: "transparent",
-    border: "none",
-    color: "#3b82f6",
-    fontSize: "14px",
-    fontWeight: "600",
-    cursor: "pointer",
   },
   footerText: {
     marginTop: "24px",
